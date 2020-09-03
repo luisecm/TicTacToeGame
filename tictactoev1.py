@@ -8,6 +8,7 @@ mapped_coordinates_x = 0
 mapped_coordinates_y = 0
 winner_x = False
 winner_o = False
+latest_player = ' '
 turns = 0
 
 
@@ -120,6 +121,7 @@ def analyze_results():
     global mapped_coordinates_y
     global coordinates
     global values
+    global latest_player
     if values[mapped_coordinates_x][mapped_coordinates_y] == 'X':
         print("This cell is occupied! Choose another one!")
         next_move()
@@ -127,9 +129,21 @@ def analyze_results():
         print("This cell is occupied! Choose another one!")
         next_move()
     elif values[mapped_coordinates_x][mapped_coordinates_y] == ' ':
-        values[mapped_coordinates_x][mapped_coordinates_y] = 'X'
-        print_table()
-        look_for_winner()
+        if latest_player == ' ':
+            values[mapped_coordinates_x][mapped_coordinates_y] = 'X'
+            latest_player = 'X'
+            print_table()
+            look_for_winner()
+        elif latest_player == 'X':
+            values[mapped_coordinates_x][mapped_coordinates_y] = 'O'
+            latest_player = 'O'
+            print_table()
+            look_for_winner()
+        elif latest_player == 'O':
+            values[mapped_coordinates_x][mapped_coordinates_y] = 'X'
+            latest_player = 'X'
+            print_table()
+            look_for_winner()
 
 
 def o_wins_horizontal():
@@ -190,8 +204,8 @@ def win_diagonal_x():
 
 
 def look_for_winner():
-    global turns
-    while turns <= 9:
+    global contador_spaces
+    while contador_spaces > 0:
         o_wins_horizontal()
         if winner_x:
             print("X wins")
@@ -225,11 +239,11 @@ def look_for_winner():
                                 if turns == 9:
                                     print("Draw")
                                     break
-                                elif turns < 9:
-                                    turns += 1
+                                else:
+                                    fill_table_values()
                                     next_move()
 
-    
+
 
 def main():
     begin_game()
